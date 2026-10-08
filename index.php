@@ -1,7 +1,36 @@
-```php
 <?php
 
 require_once "conexao.php";
+
+$mensagem = "";
+$erro = "";
+
+$nome = $_GET["nome"] ?? "";
+$email = $_GET["email"] ?? "";
+$telefone = $_GET["telefone"] ?? "";
+
+if (isset($_GET["erro"])) {
+
+    if ($_GET["erro"] === "nome") {
+        $erro = "❌ O nome precisa ser preenchido.";
+    }
+
+    if ($_GET["erro"] === "email") {
+        $erro = "❌ Digite um e-mail válido.";
+    }
+
+    if ($_GET["erro"] === "email_duplicado") {
+        $erro = "❌ Este e-mail já está cadastrado.";
+    }
+
+    if ($_GET["erro"] === "telefone") {
+        $erro = "❌ O telefone precisa ser preenchido.";
+    }
+
+    if ($_GET["erro"] === "telefone_invalido") {
+        $erro = "❌ Digite um telefone válido.";
+    }
+}
 
 $sql = "SELECT * FROM clientes ORDER BY id DESC";
 
@@ -27,9 +56,35 @@ $resultado = $conexao->query($sql);
 
 <div class="container">
 
-    <h1>Cadastro de Clientes</h1>
+      <div class="cabecalho">
+        <span class="subtitulo">SISTEMA DE GESTÃO</span>
+        <h1>Clientes</h1>
+        <p>Gerencie seus clientes de forma simples e organizada.</p>
+    </div>
+
+    <?php if ($mensagem != ""): ?>
+
+        <div class="mensagem sucesso">
+            <?php echo $mensagem; ?>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if ($erro != ""): ?>
+
+        <div class="mensagem erro">
+            <?php echo $erro; ?>
+        </div>
+
+    <?php endif; ?>
 
     <div class="formulario">
+
+    <h2>Novo cliente</h2>
+
+    <p class="descricao-formulario">
+        Preencha os dados abaixo para cadastrar um novo cliente.
+    </p>
 
         <form action="cadastrar.php" method="POST">
 
@@ -39,10 +94,11 @@ $resultado = $conexao->query($sql);
                 type="text" 
                 name="nome" 
                 id="nome" 
+                value="<?php echo htmlspecialchars($nome); ?>"
                 required
             >
 
-            <br><br>
+         
 
             <label for="email">E-mail:</label>
 
@@ -50,10 +106,11 @@ $resultado = $conexao->query($sql);
                 type="email" 
                 name="email" 
                 id="email" 
+                value="<?php echo htmlspecialchars($email); ?>"
                 required
             >
 
-            <br><br>
+        
 
             <label for="telefone">Telefone:</label>
 
@@ -64,9 +121,11 @@ $resultado = $conexao->query($sql);
                 maxlength="15"
                 inputmode="numeric"
                 placeholder="(21) 99999-9999"
+                value="<?php echo htmlspecialchars($telefone); ?>"
+                required
             >
 
-            <br><br>
+            
 
             <button type="submit">Cadastrar</button>
 
@@ -78,7 +137,11 @@ $resultado = $conexao->query($sql);
 
     <h2>Clientes cadastrados</h2>
 
-    <table border="1">
+<p class="descricao-tabela">
+    Lista de clientes registrados no sistema.
+</p>
+
+    <table>
 
         <tr>
             <th>ID</th>
@@ -101,20 +164,20 @@ $resultado = $conexao->query($sql);
                 <td><?php echo $cliente["telefone"]; ?></td>
 
                 <td>
+<a 
+    class="botao-editar"
+    href="editar.php?id=<?php echo $cliente["id"]; ?>"
+>
+    Editar
+</a>
 
-                    <a href="editar.php?id=<?php echo $cliente["id"]; ?>">
-                        Editar
-                    </a>
-
-                    |
-
-                    <a 
-                        class="excluir" 
-                        href="excluir.php?id=<?php echo $cliente["id"]; ?>"
-                        onclick="return confirm('Tem certeza que deseja excluir este cliente?');"
-                    >
-                        Excluir
-                    </a>
+<a 
+    class="botao-excluir"
+    href="excluir.php?id=<?php echo $cliente["id"]; ?>"
+    onclick="return confirm('Tem certeza que deseja excluir este cliente?');"
+>
+    Excluir
+</a>
 
                 </td>
 
@@ -126,6 +189,19 @@ $resultado = $conexao->query($sql);
 
 </div>
 
+<script>
+
+setTimeout(function() {
+
+    const mensagem = document.querySelector(".mensagem");
+
+    if (mensagem) {
+        mensagem.style.display = "none";
+    }
+
+}, 3000);
+
+</script>
 
 <script>
 
@@ -198,3 +274,4 @@ telefone.addEventListener("input", function () {
 
 </html>
 ```
+

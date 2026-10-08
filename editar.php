@@ -1,4 +1,3 @@
-```php
 <?php
 
 require_once "conexao.php";
@@ -34,9 +33,29 @@ $cliente = $resultado->fetch_assoc();
 
 <div class="container">
 
-    <h1>Editar Cliente</h1>
+    <div class="cabecalho">
+
+        <div>
+
+            <span class="subtitulo">SISTEMA DE GESTÃO</span>
+
+            <h1>Editar cliente</h1>
+
+            <p>Atualize os dados do cliente cadastrado.</p>
+
+        </div>
+
+    </div>
+
 
     <div class="formulario">
+
+        <h2>Dados do cliente</h2>
+
+        <p class="descricao-formulario">
+            Altere as informações abaixo e salve as mudanças.
+        </p>
+
 
         <form action="atualizar.php" method="POST">
 
@@ -45,6 +64,7 @@ $cliente = $resultado->fetch_assoc();
                 name="id" 
                 value="<?php echo $cliente["id"]; ?>"
             >
+
 
             <label for="nome">Nome:</label>
 
@@ -56,6 +76,7 @@ $cliente = $resultado->fetch_assoc();
                 required
             >
 
+
             <label for="email">E-mail:</label>
 
             <input 
@@ -65,6 +86,7 @@ $cliente = $resultado->fetch_assoc();
                 value="<?php echo htmlspecialchars($cliente["email"]); ?>"
                 required
             >
+
 
             <label for="telefone">Telefone:</label>
 
@@ -76,7 +98,9 @@ $cliente = $resultado->fetch_assoc();
                 inputmode="numeric"
                 value="<?php echo htmlspecialchars($cliente["telefone"]); ?>"
                 placeholder="(21) 99999-9999"
+                required
             >
+
 
             <button type="submit">
                 Salvar alterações
@@ -86,7 +110,6 @@ $cliente = $resultado->fetch_assoc();
 
     </div>
 
-    <br>
 
     <a href="index.php">← Voltar para a lista</a>
 
